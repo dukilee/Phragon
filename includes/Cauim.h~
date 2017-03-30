@@ -1,0 +1,4 @@
+class Cauim{
+	Cauim();
+	void mover(int);
+};

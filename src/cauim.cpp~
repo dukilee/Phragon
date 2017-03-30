@@ -1,0 +1,10 @@
+#include "Cauim.h"
+#include <cstdio>
+
+Cauim::Cauim(){
+
+}
+
+void Cauim::mover(int x){
+	printf("Enviando %d para o arduino.\n", x);
+}

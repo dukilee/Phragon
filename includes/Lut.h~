@@ -1,0 +1,42 @@
+#ifndef LUT_H
+#define LUT_H
+
+class Lut{
+public:
+	Lut();
+	int get(int, int, int);
+	void readCalibration();
+	void update();
+	void reset();
+
+    static inline int getColor(int r, int g, int b) {
+        return (int)*(table + ((r >> 1 << 14) + (g >> 1 << 7) + (b>>1)));
+    }
+
+	void assignColor(int r, int g, int b, int c){
+        *(table + ((r << 14) + (g << 7) + (b))) = c;
+    }
+
+    void addColor(int r, int g, int b, int c){
+        *(table + ((r << 14) + (g << 7) + (b))) += (1<<c);
+    }
+
+    int getColorId(int color){
+        int ans = -1;
+        while(color>0){
+            color  >>= 1;
+            ans++;
+        }
+        return ans;
+    }
+
+    void assignColor();
+
+	int calibration[10][3][4];
+    static const int numColors = 3;
+private:
+    char table[1<<22];
+    static const int limInf = 0;
+    static const int limSup = 51;
+};
+#endif

@@ -1,0 +1,64 @@
+#ifndef BLOBDETECTOR_H
+#define BLOBDETECTOR_H
+
+
+#include <modeling/vision/austin_villa/vision/Classifier.h>
+#include <modeling/vision/austin_villa/constants/VisionConstants.h>
+#include <modeling/vision/austin_villa/vision/structures/Blob.h>
+#include <modeling/vision/austin_villa/vision/structures/VisionParams.h>
+#include <modeling/vision/austin_villa/memory/TextLogger.h>
+#include <modeling/vision/austin_villa/memory/RobotVisionBlock.h>
+#include <modeling/vision/austin_villa/memory/ImageBlock.h>
+#include <modeling/vision/austin_villa/vision/Macros.h>
+
+class BlobDetector {
+ public:
+  BlobDetector(RobotVisionBlock*&, ImageBlock*&, Classifier*&, VisionParams&, Camera::Type&);
+  void init(TextLogger* tl){textlogger = tl;};
+
+  void formAllBlobsSoccer();
+  void formAllBlobsRacing();
+  Blob **horizontalBlob, **verticalBlob;
+  uint32_t *horizontalBlobCount, *verticalBlobCount;
+
+  void CalVertBlobData(unsigned char);
+  void CalHorzBlobData(unsigned char);
+  void VerticalBlobSort(unsigned char);
+  void HorizontalBlobSort(unsigned char);
+
+  void formOrangeBlobs();
+  void formYellowBlobs();
+  void formWhiteBlobs();
+  void resetOrangeBlobs();
+  void resetYellowBlobs();
+  void resetBlobs(Color c);
+  void calculateOrangeBlobData();
+  void calculateBandBlobData();
+
+  void SetColorTable(unsigned char*);
+  uint16_t mergeHorizontalBlobs(Color, uint16_t*, int);
+  uint16_t mergeVerticalBlobs(Color, uint16_t*, int);
+
+
+ private:
+  void formBlobsWithVertLineSegs(unsigned char*,int);
+  void formBlobsWithHorzLineSegs(unsigned char*,int);
+  uint16_t mergeBlobs(Color, Blob**, uint32_t*, uint16_t*, int);
+  void setImagePointers();
+
+  RobotVisionBlock*& robot_vision_;
+  ImageBlock*& image_;
+
+  Classifier*& classifier_;
+  VisionPoint ***verticalPoint, ***horizontalPoint;
+  uint32_t **verticalPointCount, **horizontalPointCount;
+  VisionParams& params_;
+  Camera::Type& camera_;
+  TextLogger* textlogger;
+  unsigned char* color_table_;
+  unsigned char* segImg_;
+  unsigned char* img_;
+  bool rawImageExists_;
+};
+
+#endif
